@@ -99,7 +99,7 @@ export default function Home() {
     const newToggleArray = [...toggleActiveArray];
     newToggleArray.push(false);
     setToggleActiveArray(newToggleArray);
-    handleInputChange(title, '');
+
   }
 
 
@@ -109,8 +109,8 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-16">
 
-        <div className="relative flex flex-col min-w-0 break-words bg-white text-gray-700 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 z-0">
-          <div className="flex justify-center items-center leading-relaxed text-gray-700 font-bold py-4 z-0">
+        <div className="relative flex flex-col min-w-0 break-words bg-white text-gray-700 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50">
+          <div className="flex justify-center items-center leading-relaxed text-gray-700 font-bold py-4">
 
             <div className="pt-0 px-4">
               <input
@@ -122,18 +122,19 @@ export default function Home() {
             </div>
 
             <div className="pt-0 px-4 flex flex-col justify-start items-start">
-              {toggleLinks ?
+              {toggleLinks &&
                 <>
-                  <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-top-right absolute right-0">
+                  <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-16 absolute">
                     <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
                     {listOfLinks}
                   </div>
-                  <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+
+                  <div onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
                 </>
-                :
-                <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-100 text-gray-500 active:bg-gray-100 text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                  Linked To</button>
               }
+              <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-100 text-gray-500 active:bg-gray-100 text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                Linked To</button>
+
             </div>
 
             <IoAddCircleSharp onClick={addButton} className="text-green-500" size={45} />
