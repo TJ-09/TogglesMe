@@ -17,7 +17,6 @@ export default function Home() {
     setToggleActiveArray(tempArray);
   }
 
-  const [toggleActive, setToggleActive] = useState(false);
   const [toggleActiveArray, setToggleActiveArray] = useState([false, false]);
   const [toggleLinks, setToggleLinks] = useState(false);
 
@@ -93,12 +92,17 @@ export default function Home() {
   }), [input]);
 
   const addButton = () => {
-    const newArray = [...buttonArray];
-    newArray.push({ title: input.title });
-    setButtonArray(newArray);
-    const newToggleArray = [...toggleActiveArray];
-    newToggleArray.push(false);
-    setToggleActiveArray(newToggleArray);
+
+    if (input.title.length > 0) {
+
+      const newArray = [...buttonArray];
+      newArray.push({ title: input.title, link: input.link });
+      setButtonArray(newArray);
+      const newToggleArray = [...toggleActiveArray];
+      newToggleArray.push(false);
+      setToggleActiveArray(newToggleArray);
+      setInput({ title: '', link: [] })
+    }
 
   }
 
