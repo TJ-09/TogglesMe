@@ -1,9 +1,10 @@
 import Head from 'next/head'
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Toggle from '../components/toggle/toggle';
 import { IoAddCircleSharp } from 'react-icons/io5'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
+import { useRouter } from 'next/router';
 
 export default function Home() {
 
@@ -18,24 +19,34 @@ export default function Home() {
     setToggleActiveArray(tempArray);
   }
 
+  const router = useRouter();
   const [togglesTitle, setTogglesTitle] = useState('');
   const [toggleActiveArray, setToggleActiveArray] = useState([0, 0]); // using 0 not false as it shortens the base64
   const [toggleLinks, setToggleLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState(false);
-
+  const [mode, setMode] = useState() // 1 = view, 2 = edit, 3=loading?
   const [input, setInput] = useState({
     title: '',
     link: [],
   })
-
   const [buttonArray, setButtonArray] = useState([
     { title: 'Number 1', link: [1] },
     { title: 'Number 2', link: [] },
   ]);
 
+  useEffect(() => {
+    if (router.query.q) {
+      // there is a query
+      // comes in title, btn, active
+      const splitQueryString = router.query.q.split("$");
+      Decoding(splitQueryString[0], splitQueryString[1], splitQueryString[2]);
+    }
+
+  }, [router.query.q, router])
+
   let toggleButtons = null;
-  if (buttonArray) {
+  if (buttonArray && buttonArray.length > 0) {
     toggleButtons = buttonArray.map((el, elIndex) => {
       return <Toggle
         key={elIndex}
@@ -98,7 +109,6 @@ export default function Home() {
   const addButton = () => {
 
     if (input.title.length > 0) {
-
       const newArray = [...buttonArray];
       newArray.push({ title: input.title, link: input.link });
       setButtonArray(newArray);
@@ -124,32 +134,48 @@ export default function Home() {
     buttonArray.map(el => {
       encodedBtnArray = encodedBtnArray + el.title.toString() + "&" + el.link.toString() + "~";
     })
-    encodedBtnArray = encodeURI(btoa(encodedBtnArray));
-    const encodedTitle = encodeURI(btoa(togglesTitle));
-    const encodedActiveArray = encodeURI(btoa(toggleActiveArray.toString()));
+    encodedBtnArray = encodeURIComponent(btoa(encodedBtnArray));
+    const encodedTitle = encodeURIComponent(btoa(togglesTitle));
+    const encodedActiveArray = encodeURIComponent(btoa(toggleActiveArray.toString()));
 
-    setShareLink(encodedTitle + "&" + encodedTitle + "&" + encodedActiveArray)
+    setShareLink(encodedTitle + "$" + encodedBtnArray + "$" + encodedActiveArray)
 
   }
 
-  const Decoding = () => {
+  const Decoding = (encodedTitle, encodedBtnArray, encodedActiveArray) => {
 
-    const decodedTitle = decodeURI(atob(encodedTitle));
-    const decodedActiveArray = decodeURI(atob(encodedActiveArray));
-    const decodedBtnArray = decodeURI(atob(encodedBtnArray));
+    const decodedTitle = decodeURIComponent(atob(encodedTitle));
+    const decodedActiveArray = decodeURIComponent(atob(encodedActiveArray));
+    const decodedBtnArray = decodeURIComponent(atob(encodedBtnArray));
 
     // undo here
     const decodedBtnArraySplit = decodedBtnArray.split("~");
+    setButtonArray([{}]); // clear it
+    let newArray = [...buttonArray];
     decodedBtnArraySplit.map((el, index) => {
       const temp = el.split("&");
       if (temp.length === 2) {
-        console.log(temp);
-        console.log(temp[1].split(","));
+
+        newArray = [...buttonArray];
+        const linkArray = temp[1].split(",");
+        linkArray.map((el, index) => {
+          if (el.length > 0) { // could have no link
+            linkArray[index] = parseInt(el);
+          }
+        })
+        newArray.push({ title: temp[0], link: linkArray });
+
       }
     })
+    setButtonArray(newArray);
 
-    // console.log(decodedTitle);
-    // console.log(decodedActiveArray);
+    // this gives an array of strings so parse it to 
+    const activeArray = decodedActiveArray.split(",");
+    activeArray.map((el, index) => {
+      activeArray[index] = parseInt(el);
+    })
+    setTogglesTitle(decodedTitle);
+    setToggleActiveArray(activeArray)
   }
 
   return (
@@ -164,7 +190,7 @@ export default function Home() {
         <meta property="og:description" content='Create funny toggles and share with your friends' />
         <meta property="og:site_name" content="Toggles Me" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-        <meta charset="UTF-8"></meta>
+        <meta charSet="UTF-8"></meta>
       </Head>
 
       <main className="bg-gradient-to-b from-indigo-300 to-purple-400 relative min-h-screen">
@@ -234,7 +260,7 @@ export default function Home() {
                 Share Link</h3>
 
               <p className="px-4 py-3 mb-2 text-white bg-indigo-500 rounded min-w-50 max-w-4xl text-sm shadow-lg border-0 outline-none focus:outline-none focus:ring">
-                {shareLink}
+                {process.env.NEXT_PUBLIC_URL}?q={shareLink}
               </p>
 
               <button onClick={() => { navigator.clipboard.writeText(shareLink) }} className="bg-purple-500 text-white flex justify-center items-center active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
@@ -247,11 +273,8 @@ export default function Home() {
             <h3 className=" px-4 text-4xl font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-gray-800 pt-6">
               {togglesTitle}</h3>
 
-            {/* <div className="flex flex-col justify-center items-center leading-relaxed text-gray-500 font-bold uppercase py-4"> */}
             <div className="leading-relaxed text-gray-500 font-bold uppercase py-4">
-
               {toggleButtons}
-
             </div>
           </div>
         </div>
