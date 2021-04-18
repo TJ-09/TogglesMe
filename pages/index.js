@@ -273,7 +273,6 @@ export default function Home() {
       setMode(2); // edit mode
       router.push('/', undefined, { shallow: true }); // push to the home
     }
-
   }
 
   const Create = () => {
@@ -424,7 +423,7 @@ export default function Home() {
 
                 <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
                   <div className="pt-0 px-4">
-                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Result (optional)</div>
+                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Result</div>
                     <input
                       value={toggleResult}
                       onChange={e => setToggleResult(e.currentTarget.value)}
@@ -433,7 +432,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
+                <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl border-t border-gray-300">
                   <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggle Name</div>
                   <div className="flex flex-col sm:flex-row justify-center items-center pt-0 px-4">
 
