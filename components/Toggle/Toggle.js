@@ -25,7 +25,7 @@ const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn, m
                     <div className={`bg-white w-8 h-8 rounded-full shadow-md cursor-pointer transform duration-300 ease-in-out ${toggleActive && 'translate-x-6'}`}>
                     </div>
                 </button>
-                <div className="w-2/4 flex justify-end items-center cursor-pointer">
+                <div className="flex ml-16 sm:w-full sm:pr-4 justify-end items-center cursor-pointer">
                     {mode === 2 && <>
                         <span className="sr-only">Delete Toggle</span>
                         <IoRemoveCircleSharp onClick={() => deleteFn(index)} alt="Delete Toggle" size={25} className="text-red-300 shadow rounded-full hover:shadow-2xl outline-none focus:outline-none ease-linear transition-all duration-150" />
