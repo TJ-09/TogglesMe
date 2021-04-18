@@ -16,7 +16,8 @@ export default function Home() {
   const [toggleEditLinks, setToggleEditLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState(false);
-  const [modalToggle, setModalToggle] = useState(true);
+  const [modalToggle, setModalToggle] = useState(false);
+  const [validationPrompt, setValidationPrompt] = useState([]);
   const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
   const [input, setInput] = useState({
     title: '',
@@ -184,7 +185,7 @@ export default function Home() {
 
   const addButton = () => {
 
-    if (input.title.length > 0) {
+    if (input.title.length > 0 && !input.title.includes("&") && !input.title.includes("~")) {
       const newArray = [...buttonArray];
       newArray.push({ title: input.title, link: input.link });
       setButtonArray(newArray);
@@ -196,8 +197,37 @@ export default function Home() {
         title: '',
         link: []
       })
+    } else {
+      setValidationPrompt([]);
+      if (input.title.includes("&") || input.title.includes("~")) {
+        setValidationPrompt(validationPrompt => [...validationPrompt, { message: 'Toggles name cannot contain "&" or "~" characters', background: 'bg-indigo-500' }]);
+      }
     }
+  }
 
+  let validationPres = null;
+  if (validationPrompt.length > 0) {
+    // loop through array for items and show them
+    validationPres = validationPrompt.map((el, index) => {
+      return (
+        <div key={index} className={`text-white mx-2.5 px-3 py-2 sm:px-6 sm:py-4 sm:mt-3 border-0 rounded relative align-middle mb-4 ${el.background}`}>
+          <span className="text-s sm:text-xl lg:text-base inline-block align-middle mr-0 sm:mr-8">
+            {el.message}</span>
+          <button
+            className="absolute bg-transparent text-lg sm:text-2xl text-purple-200 font-semibold leading-none right-0 top-0 mt-4 mr-2 outline-none focus:outline-none"
+            onClick={() => clearAlert(index)}>
+            <span>x</span>
+          </button>
+        </div>
+      )
+    })
+
+  }
+
+  const clearAlert = (index) => {
+    let splicedValPrompts = [...validationPrompt]
+    splicedValPrompts.splice(index, 1);
+    setValidationPrompt(splicedValPrompts);
   }
 
   const Reset = () => {
@@ -266,39 +296,44 @@ export default function Home() {
   }
 
   const Decoding = (encodedTitle, encodedBtnArray, encodedActiveArray) => {
+    try { // crude error handling
+      const decodedTitle = decodeURIComponent(atob(encodedTitle));
+      const decodedActiveArray = decodeURIComponent(atob(encodedActiveArray));
+      const decodedBtnArray = decodeURIComponent(atob(encodedBtnArray));
 
-    const decodedTitle = decodeURIComponent(atob(encodedTitle));
-    const decodedActiveArray = decodeURIComponent(atob(encodedActiveArray));
-    const decodedBtnArray = decodeURIComponent(atob(encodedBtnArray));
+      // undo here
+      const decodedBtnArraySplit = decodedBtnArray.split("~");
+      setButtonArray([{}]); // clear it
+      let newArray = [...buttonArray];
+      decodedBtnArraySplit.map((el, index) => {
+        const temp = el.split("&");
+        if (temp.length === 2) {
 
-    // undo here
-    const decodedBtnArraySplit = decodedBtnArray.split("~");
-    setButtonArray([{}]); // clear it
-    let newArray = [...buttonArray];
-    decodedBtnArraySplit.map((el, index) => {
-      const temp = el.split("&");
-      if (temp.length === 2) {
+          newArray = [...buttonArray];
+          const linkArray = temp[1].split(",");
+          linkArray.map((el, index) => {
+            if (el.length > 0) { // could have no link
+              linkArray[index] = parseInt(el);
+            }
+          })
+          newArray.push({ title: temp[0], link: linkArray });
 
-        newArray = [...buttonArray];
-        const linkArray = temp[1].split(",");
-        linkArray.map((el, index) => {
-          if (el.length > 0) { // could have no link
-            linkArray[index] = parseInt(el);
-          }
-        })
-        newArray.push({ title: temp[0], link: linkArray });
+        }
+      })
+      setButtonArray(newArray);
 
-      }
-    })
-    setButtonArray(newArray);
+      // this gives an array of strings so parse it to 
+      const activeArray = decodedActiveArray.split(",");
+      activeArray.map((el, index) => {
+        activeArray[index] = parseInt(el);
+      })
+      setTogglesTitle(decodedTitle);
+      setToggleActiveArray(activeArray)
 
-    // this gives an array of strings so parse it to 
-    const activeArray = decodedActiveArray.split(",");
-    activeArray.map((el, index) => {
-      activeArray[index] = parseInt(el);
-    })
-    setTogglesTitle(decodedTitle);
-    setToggleActiveArray(activeArray)
+
+    } catch (error) {
+      modalToggle(true);
+    }
   }
 
   return (
@@ -363,7 +398,6 @@ export default function Home() {
                       onChange={e => handleInputChange(e.currentTarget.name, e.target.value)}
                       type="text" placeholder="Toggle Name"
                       className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full" />
-
                     <div className="pt-0 px-4 flex flex-wrap justify-start items-start">
                       {toggleLinks &&
                         <>
@@ -389,6 +423,7 @@ export default function Home() {
                     </div>
 
                   </div>
+                  {validationPres}
 
                 </div>
               </>}

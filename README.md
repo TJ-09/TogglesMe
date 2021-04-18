@@ -35,7 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Stuff To Do List
 
-- [] Error checking
+- [x] Error checking
 - [x] Modal for errors
 - [x] Create own button
 - [x] Mode switching
@@ -43,3 +43,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - [x] Delete button
 - [x] Title typography
 - [x] Reset button (for both)
+- [x] input checking
