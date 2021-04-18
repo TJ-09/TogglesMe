@@ -311,11 +311,14 @@ export default function Home() {
                   {toggleLinks &&
                     <>
                       <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-16 absolute">
-                        <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
+                        <span className="sr-only">Close link toggles menu</span>
+                        <AiOutlineCloseCircle size={25} alt="Close link toggles menu" className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
                         {listOfLinks}
                       </div>
-
-                      <button onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></button>
+                      <button>
+                        <span className="sr-only">Close linking new Toggle</span>
+                        <div onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                      </button>
                     </>
                   }
                   <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-500 text-white font-semibold active:bg-gray-100 text-sm px-6 py-3 my-3 sm:my-0 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
@@ -324,7 +327,8 @@ export default function Home() {
                 </div>
                 <div className="mt-3 block sm:hidden text-sm leading-normal text-center text-gray-500 font-bold uppercase">Add Toggle</div>
                 <div className="mb-3 sm:mb-0">
-                  <IoAddCircleSharp onClick={addButton} className="text-green-500 cursor-pointer shadow rounded-full hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" size={45} />
+                  <span className="sr-only">Add Toggle Button</span>
+                  <IoAddCircleSharp onClick={addButton} alt="Add Toggle Button" className="text-green-500 cursor-pointer shadow rounded-full hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" size={45} />
                 </div>
 
               </div>
@@ -349,7 +353,7 @@ export default function Home() {
               </p>
 
               <button onClick={() => { navigator.clipboard.writeText(shareLink) }} className="bg-purple-500 text-white flex justify-center items-center active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                <i><FaCopy size={25} className="pr-3" /></i> Copy</button>
+                <i><FaCopy size={25} className="pr-3" /></i> Copy Link</button>
             </div>
           }
 
@@ -362,12 +366,20 @@ export default function Home() {
               {toggleEditLinks &&
                 <>
                   <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center absolute">
-                    <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
+                    <button className="focus:outline-none">
+                      <span className="sr-only">Close editing Toggle</span>
+                      <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
+                    </button>
                     {listOfEditLinks}
-                    <AiOutlineSave size={25} className="text-green-500 cursor-pointer" onClick={SaveEditToggle} />
+                    <button className="focus:outline-none">
+                      <span className="sr-only">Save Edits to toggle</span>
+                      <AiOutlineSave size={25} className="text-green-500 cursor-pointer" onClick={SaveEditToggle} />
+                    </button>
                   </div>
-
-                  <div onClick={CloseEdit} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                  <button className="focus:outline-none">
+                    <span className="sr-only">Close editing Toggle</span>
+                    <div onClick={CloseEdit} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                  </button>
                 </>
               }
               {toggleButtons}
