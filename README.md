@@ -37,9 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 - [] Error checking
 - [] Modal for errors
-- [] Create own button
-- [] Mode switching
+- [x] Create own button
+- [x] Mode switching
 - [x] Edit button
 - [x] Delete button
 - [x] Title typography
-- [] Reset button (for both)
+- [x] Reset button (for both)

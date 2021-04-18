@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React, { useState, useCallback, useEffect } from 'react';
 import Toggle from '../components/toggle/toggle';
-import { IoAddCircleSharp } from 'react-icons/io5'
+import { IoAddCircleSharp, IoRefreshSharp } from 'react-icons/io5'
 import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
 import { useRouter } from 'next/router';
@@ -92,7 +92,7 @@ export default function Home() {
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState(false);
 
-  const [mode, setMode] = useState() // 1 = view, 2 = edit, 3=loading?
+  const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
   const [input, setInput] = useState({
     title: '',
     link: [],// this is for new buttons
@@ -100,16 +100,19 @@ export default function Home() {
     editIndex: null // used so we know what is been edited
   })
   const [buttonArray, setButtonArray] = useState([
-    { title: 'Number 1', link: [1] },
-    { title: 'Number 2', link: [] },
+    { title: 'Toggle 1', link: [1] },
+    { title: 'Toggle 2', link: [] },
   ]);
 
   useEffect(() => {
     if (router.query.q) {
       // there is a query
       // comes in title, btn, active
+      setMode(1); // view mode
       const splitQueryString = router.query.q.split("$");
       Decoding(splitQueryString[0], splitQueryString[1], splitQueryString[2]);
+    } else {
+      setMode(2); // edit mode
     }
 
   }, [router.query.q, router])
@@ -126,6 +129,7 @@ export default function Home() {
         clicked={toggle}
         deleteFn={DeleteToggle}
         editFn={MakeEditLinks}
+        mode={mode}
       />
     });
   }
@@ -194,6 +198,35 @@ export default function Home() {
       })
     }
 
+  }
+
+  const Reset = () => {
+
+    if (router.query.q) { // if there is a query of the toggle then reset by decoding what is in it again but show as a view
+
+      router.push({
+        pathname: '/',
+        query: { q: router.query.q },
+      });
+    } else {
+      // reset everything
+      setButtonArray([
+        { title: 'Toggle 1', link: [1] },
+        { title: 'Toggle 2', link: [] },
+      ]);
+      setToggleActiveArray([0, 0]);
+      setTogglesTitle(''); // no title
+      setOpenShare(false); // close share menu
+      setMode(2); // edit mode
+      router.push('/', undefined, { shallow: true }); // push to the home
+    }
+
+  }
+
+  const Create = () => {
+    Reset();
+    setMode(2); // edit mode
+    router.push('/', undefined, { shallow: true }); // push to the home
   }
 
   const OpenSharesLink = () => {
@@ -293,68 +326,68 @@ export default function Home() {
 
           {/* Creating Box */}
           <div className="relative flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-500 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
-
-            <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
-              <div className="pt-0 px-4">
-                <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Title</div>
-                <input
-                  value={togglesTitle}
-                  onChange={e => setTogglesTitle(e.currentTarget.value)}
-                  type="text" placeholder="Title for Toggles"
-                  className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring" />
-              </div>
-            </div>
-
-            <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
-              <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggle Name</div>
-              <div className="flex flex-col sm:flex-row justify-center items-center pt-0 px-4">
-
-                <input
-                  value={input.title}
-                  name="title"
-                  onChange={e => handleInputChange(e.currentTarget.name, e.target.value)}
-                  type="text" placeholder="Toggle Name"
-                  className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full" />
-
-                <div className="pt-0 px-4 flex flex-wrap justify-start items-start">
-                  {toggleLinks &&
-                    <>
-                      <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-16 absolute">
-                        <span className="sr-only">Close link toggles menu</span>
-                        <AiOutlineCloseCircle size={25} alt="Close link toggles menu" className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
-                        {listOfLinks}
-                      </div>
-                      <button>
-                        <span className="sr-only">Close linking new Toggle</span>
-                        <div onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
-                      </button>
-                    </>
-                  }
-                  <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-500 text-white font-semibold active:bg-gray-100 text-sm px-6 py-3 my-3 sm:my-0 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    Link Toggle</button>
-
-                </div>
-                <div className="mt-3 block sm:hidden text-sm leading-normal text-center text-gray-500 font-bold uppercase">Add Toggle</div>
-                <div className="mb-3 sm:mb-0">
-                  <span className="sr-only">Add Toggle Button</span>
-                  <IoAddCircleSharp onClick={addButton} alt="Add Toggle Button" className="text-green-500 cursor-pointer shadow rounded-full hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" size={45} />
+            {mode !== 1 &&
+              <>
+                <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
+                  <div className="pt-0 px-4">
+                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Title</div>
+                    <input
+                      value={togglesTitle}
+                      onChange={e => setTogglesTitle(e.currentTarget.value)}
+                      type="text" placeholder="Title for Toggles"
+                      className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring" />
+                  </div>
                 </div>
 
-              </div>
+                <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
+                  <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggle Name</div>
+                  <div className="flex flex-col sm:flex-row justify-center items-center pt-0 px-4">
 
-            </div>
+                    <input
+                      value={input.title}
+                      name="title"
+                      onChange={e => handleInputChange(e.currentTarget.name, e.target.value)}
+                      type="text" placeholder="Toggle Name"
+                      className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full" />
 
-            <div className="pt-0 px-4 flex flex-col justify-center items-center py-4">
-              <button onClick={OpenSharesLink} className="bg-purple-500 flex justify-center items-center text-white active:bg-pink-600 font-bold uppercase text-sm px-5 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"          >
+                    <div className="pt-0 px-4 flex flex-wrap justify-start items-start">
+                      {toggleLinks &&
+                        <>
+                          <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-16 absolute">
+                            <span className="sr-only">Close link toggles menu</span>
+                            <AiOutlineCloseCircle size={25} alt="Close link toggles menu" className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
+                            {listOfLinks}
+                          </div>
+                          <button>
+                            <span className="sr-only">Close linking new Toggle</span>
+                            <div onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                          </button>
+                        </>
+                      }
+                      <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-500 text-white font-semibold active:bg-indigo-600 text-sm px-6 py-3 my-3 sm:my-0 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                        Link Toggle</button>
+
+                    </div>
+                    <div className="mt-3 block sm:hidden text-sm leading-normal text-center text-gray-500 font-bold uppercase">Add Toggle</div>
+                    <div className="mb-3 sm:mb-0">
+                      <span className="sr-only">Add Toggle Button</span>
+                      <IoAddCircleSharp onClick={addButton} alt="Add Toggle Button" className="text-green-500 cursor-pointer shadow rounded-full hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" size={45} />
+                    </div>
+
+                  </div>
+
+                </div>
+              </>}
+            <div className={`pt-4 px-4 flex flex-col justify-center items-center py-4 ${mode !== 1 && "border-t border-gray-300"}`}>
+              <button onClick={OpenSharesLink} className="bg-purple-500 flex justify-center items-center text-white font-bold active:bg-indigo-600 uppercase text-sm px-5 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"          >
                 <i><FaShareAlt size={35} className="pr-3" /></i> Share Toggles</button>
             </div>
-
           </div>
 
           {/* Share box */}
           {openShare &&
             <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
-              <h3 className="px-4 text-4xl font-normal text-center leading-normal mb-2 text-gray-800 pt-6">
+              <h3 className="px-4 text-4xl font-normal text-center leading-normal mb-2 text-gray-700 pt-6">
                 Share Link</h3>
 
               <p className="px-4 py-3 mb-2 text-white bg-indigo-500 rounded min-w-50 max-w-4xl text-sm shadow-lg border-0 outline-none focus:outline-none focus:ring">
@@ -368,7 +401,7 @@ export default function Home() {
 
           {/* Main toggles */}
           <div className="static min-w-0 break-words bg-white text-gray-700 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
-            <h3 className=" px-4 text-4xl font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-gray-800 pt-6">
+            <h3 className=" px-4 text-4xl font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-gray-700 pt-6">
               {togglesTitle}</h3>
 
             <div className="leading-relaxed text-gray-500 font-bold uppercase py-4">
@@ -393,6 +426,30 @@ export default function Home() {
               }
               {toggleButtons}
             </div>
+            <div className="flex justify-between">
+
+              {/* Reset Button */}
+              <div onClick={Reset} className="flex items-center cursor-pointer font-sniglet text-purple-500 hover:text-indigo-700 focus:text-purple-300">
+                <button className="focus:outline-none">
+                  <span className="sr-only">Reset Toggles Page</span>
+                  <IoRefreshSharp size={25} />
+                </button>
+                <p className="text-xs">Reset</p>
+              </div>
+
+              {/* Create own Button */}
+              {mode === 1 &&
+
+                <div onClick={Create} className="flex items-center cursor-pointer font-sniglet text-purple-500 hover:text-indigo-700 focus:text-purple-300">
+                  <button className="focus:outline-none">
+                    <span className="sr-only">Create your own Toggle</span>
+                    <IoAddCircleSharp size={25} />
+                  </button>
+                  <p className="text-xs">Create your own Toggle!</p>
+                </div>
+              }
+            </div>
+
           </div>
         </div>
 

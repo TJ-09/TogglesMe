@@ -1,7 +1,7 @@
 import { FiEdit } from 'react-icons/fi'
 import { IoRemoveCircleSharp } from 'react-icons/io5'
 
-const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn }) => {
+const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn, mode }) => {
 
     const srText = 'Toggle for ' + title;
 
@@ -9,10 +9,12 @@ const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn })
         <div className="flex justify-center items-center">
             <div className="w-2/4 flex items-center">
                 <div className="pl-4">
-                    <button className="focus:outline-none" onClick={() => editFn(index)}>
-                        <span className="sr-only">Edit Toggle</span>
-                        <FiEdit size={25} className="text-green-300 outline-none focus:outline-none ease-linear transition-all duration-150 cursor-pointer" />
-                    </button>
+                    {mode === 2 &&
+                        <button className="focus:outline-none" onClick={() => editFn(index)}>
+                            <span className="sr-only">Edit Toggle</span>
+                            <FiEdit size={25} className="text-green-300 outline-none focus:outline-none ease-linear transition-all duration-150 cursor-pointer" />
+                        </button>
+                    }
                 </div>
                 <p className="py-4 px-4 break-words w-2/4 flex ml-auto justify-end">{title}</p>
             </div>
@@ -24,8 +26,10 @@ const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn })
                     </div>
                 </button>
                 <div className="w-2/4 flex justify-end items-center cursor-pointer">
-                    <span className="sr-only">Delete Toggle</span>
-                    <IoRemoveCircleSharp onClick={() => deleteFn(index)} alt="Delete Toggle" size={25} className="text-red-300 shadow rounded-full hover:shadow-2xl outline-none focus:outline-none ease-linear transition-all duration-150" />
+                    {mode === 2 && <>
+                        <span className="sr-only">Delete Toggle</span>
+                        <IoRemoveCircleSharp onClick={() => deleteFn(index)} alt="Delete Toggle" size={25} className="text-red-300 shadow rounded-full hover:shadow-2xl outline-none focus:outline-none ease-linear transition-all duration-150" />
+                    </>}
                 </div>
             </div>
 
