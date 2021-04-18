@@ -80,7 +80,7 @@ export default function Home() {
       link: input.edLink
     });
     setButtonArray(newArray);
-
+    CloseEdit();
   }
 
   const router = useRouter();
@@ -350,7 +350,7 @@ export default function Home() {
                 {process.env.NEXT_PUBLIC_URL}?q={shareLink}
               </p>
 
-              <button onClick={() => { navigator.clipboard.writeText(shareLink) }} className="bg-purple-500 text-white flex justify-center items-center active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+              <button onClick={() => { navigator.clipboard.writeText(shareLink) }} className="bg-purple-500 text-white flex justify-center items-center active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                 <i><FaCopy size={25} className="pr-3" /></i> Copy</button>
             </div>
           }
