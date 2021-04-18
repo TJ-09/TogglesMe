@@ -36,7 +36,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Stuff To Do List
 
 - [] Error checking
-- [] Modal for errors
+- [x] Modal for errors
 - [x] Create own button
 - [x] Mode switching
 - [x] Edit button

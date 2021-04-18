@@ -6,8 +6,28 @@ import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
 import { useRouter } from 'next/router';
 import LinkMenu from '../components/LinkMenu/LinkMenu';
+import Modal from '../components/Modal/Modal';
 
 export default function Home() {
+  const router = useRouter();
+  const [togglesTitle, setTogglesTitle] = useState('');
+  const [toggleActiveArray, setToggleActiveArray] = useState([0, 0]); // using 0 not false as it shortens the base64
+  const [toggleLinks, setToggleLinks] = useState(false);
+  const [toggleEditLinks, setToggleEditLinks] = useState(false);
+  const [openShare, setOpenShare] = useState(false);
+  const [shareLink, setShareLink] = useState(false);
+  const [modalToggle, setModalToggle] = useState(true);
+  const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
+  const [input, setInput] = useState({
+    title: '',
+    link: [],// this is for new buttons
+    edLink: [], // this is for edits
+    editIndex: null // used so we know what is been edited
+  })
+  const [buttonArray, setButtonArray] = useState([
+    { title: 'Toggle 1', link: [1] },
+    { title: 'Toggle 2', link: [] },
+  ]);
 
   const toggle = (index, linked) => {
     const tempArray = [...toggleActiveArray];
@@ -83,26 +103,6 @@ export default function Home() {
     setButtonArray(newArray);
     CloseEdit();
   }
-
-  const router = useRouter();
-  const [togglesTitle, setTogglesTitle] = useState('');
-  const [toggleActiveArray, setToggleActiveArray] = useState([0, 0]); // using 0 not false as it shortens the base64
-  const [toggleLinks, setToggleLinks] = useState(false);
-  const [toggleEditLinks, setToggleEditLinks] = useState(false);
-  const [openShare, setOpenShare] = useState(false);
-  const [shareLink, setShareLink] = useState(false);
-
-  const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
-  const [input, setInput] = useState({
-    title: '',
-    link: [],// this is for new buttons
-    edLink: [], // this is for edits
-    editIndex: null // used so we know what is been edited
-  })
-  const [buttonArray, setButtonArray] = useState([
-    { title: 'Toggle 1', link: [1] },
-    { title: 'Toggle 2', link: [] },
-  ]);
 
   useEffect(() => {
     if (router.query.q) {
@@ -203,7 +203,9 @@ export default function Home() {
   const Reset = () => {
 
     if (router.query.q) { // if there is a query of the toggle then reset by decoding what is in it again but show as a view
-
+      if (modalToggle) {
+        setModalToggle(false);
+      }
       router.push({
         pathname: '/',
         query: { q: router.query.q },
@@ -224,6 +226,9 @@ export default function Home() {
   }
 
   const Create = () => {
+    if (modalToggle) {
+      setModalToggle(false);
+    }
     Reset();
     setMode(2); // edit mode
     router.push('/', undefined, { shallow: true }); // push to the home
@@ -312,6 +317,15 @@ export default function Home() {
       </Head>
 
       <main className="bg-gradient-to-b from-indigo-300 to-purple-400 relative min-h-screen">
+
+        <Modal title={'Something went wrong with the link =('}
+          toggle={modalToggle}
+          negFn={Create}
+          posFn={Reset}
+          body={'That link didn\'t work for some reason! Try it again or go to the home page.'}
+          posBtn={'Try Again'}
+          negBtn={'Home'}
+        />
 
         <div className="container mx-auto px-4 py-16 max-w-6xl">
 
