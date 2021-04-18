@@ -33,7 +33,7 @@ export default function Home() {
     { title: 'Toggle 1', link: [1] },
     { title: 'Toggle 2', link: [] },
   ]);
-  const urlLink = `${process.env.NEXT_PUBLIC_URL}?q=`
+  const urlLink = `https://${process.env.NEXT_PUBLIC_URL}?q=`
 
   const toggle = (index, linked) => {
     const tempArray = [...toggleActiveArray];
