@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import LinkMenu from '../components/LinkMenu/LinkMenu';
 import Modal from '../components/Modal/Modal';
 import confetti from 'canvas-confetti';
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -400,11 +401,16 @@ export default function Home() {
 
           {/* Heading */}
           <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
-            <h1 className="px-4 py-4 text-4xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
-              Toggles Me</h1>
-            <h3 className="hidden sm:block px-4 pb-4 text-md sm:text-sm font-sniglet font-normal text-center text-purple-500">
-              Create and share funny toggles with your friends
+            <Link href='/'>
+              <a>
+                <span className="sr-only">Home Link</span>
+                <h1 className="px-4 py-4 text-4xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
+                  Toggles Me</h1>
+                <h3 className="hidden sm:block px-4 pb-4 text-md sm:text-sm font-sniglet font-normal text-center text-purple-500">
+                  Create and share funny toggles with your friends
             </h3>
+              </a>
+            </Link>
           </div>
 
           {/* Creating Box */}
