@@ -259,6 +259,7 @@ export default function Home() {
         pathname: '/',
         query: { q: router.query.q },
       });
+      setConfettiFire(false);
     } else {
       // reset everything
       setButtonArray([
@@ -423,7 +424,7 @@ export default function Home() {
 
                 <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
                   <div className="pt-0 px-4">
-                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Result</div>
+                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Result</div>
                     <input
                       value={toggleResult}
                       onChange={e => setToggleResult(e.currentTarget.value)}
@@ -433,7 +434,7 @@ export default function Home() {
                 </div>
 
                 <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl border-t border-gray-300">
-                  <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggle Name</div>
+                  <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Create A Toggle</div>
                   <div className="flex flex-col sm:flex-row justify-center items-center pt-0 px-4">
 
                     <input
@@ -445,7 +446,7 @@ export default function Home() {
                     <div className="pt-0 px-4 flex flex-wrap justify-start items-start">
                       {toggleLinks &&
                         <>
-                          <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-16 absolute">
+                          <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-bottom-right top-40 absolute">
                             <span className="sr-only">Close link toggles menu</span>
                             <AiOutlineCloseCircle size={25} alt="Close link toggles menu" className="text-purple-500 cursor-pointer" onClick={() => setToggleLinks(!toggleLinks)} />
                             {listOfLinks}
@@ -500,7 +501,7 @@ export default function Home() {
             <div className="leading-relaxed text-gray-500 font-bold uppercase py-4">
               {toggleEditLinks &&
                 <>
-                  <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center absolute">
+                  <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center left-8 absolute">
                     <button className="focus:outline-none">
                       <span className="sr-only">Close editing Toggle</span>
                       <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
