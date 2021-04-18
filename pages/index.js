@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import React, { useState, useCallback, useEffect } from 'react';
-import Toggle from '../components/toggle/toggle';
+import Toggle from '../components/Toggle/Toggle';
 import { IoAddCircleSharp, IoRefreshSharp } from 'react-icons/io5'
 import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
