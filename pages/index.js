@@ -267,7 +267,7 @@ export default function Home() {
     <>
       <Head>
         <title>Toggles Me</title>
-        <meta name="description" content='Create funny toggles and share with your friends'></meta>
+        <meta name="description" content='Create and share funny toggles with your friends'></meta>
         <meta property="og:title" content='Toggles Me' />
         <meta property="og:type" content='website' />
         <meta property="og:url" content='toggles.me' />
@@ -282,8 +282,17 @@ export default function Home() {
 
         <div className="container mx-auto px-4 py-16 max-w-6xl">
 
+          {/* Heading */}
+          <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+            <h1 className="px-4 py-4 text-4xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
+              Toggles Me</h1>
+            <h3 className="hidden sm:block px-4 pb-4 text-md sm:text-sm font-sniglet font-normal text-center text-purple-500">
+              Create and share funny toggles with your friends
+            </h3>
+          </div>
+
           {/* Creating Box */}
-          <div className="relative flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-500 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50">
+          <div className="relative flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-500 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
 
             <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
               <div className="pt-0 px-4">

@@ -39,7 +39,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - [] Modal for errors
 - [] Create own button
 - [] Mode switching
-- [] Edit button
-- [] Delete button
-- [] Title typography
+- [x] Edit button
+- [x] Delete button
+- [x] Title typography
 - [] Reset button (for both)

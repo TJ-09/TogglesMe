@@ -10,6 +10,9 @@ module.exports = {
         purple: colors.purple,
         indigo: colors.indigo
       },
+      fontFamily: {
+        'sniglet': ['Sniglet', 'cursive']
+      },
     },
   },
   variants: {
