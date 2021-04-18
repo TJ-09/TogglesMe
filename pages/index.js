@@ -2,7 +2,7 @@ import Head from 'next/head'
 import React, { useState, useCallback, useEffect } from 'react';
 import Toggle from '../components/toggle/toggle';
 import { IoAddCircleSharp } from 'react-icons/io5'
-import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
 import { useRouter } from 'next/router';
 
@@ -19,16 +19,85 @@ export default function Home() {
     setToggleActiveArray(tempArray);
   }
 
+  const DeleteToggle = (index) => {
+    // remove it from the btn array
+    const newArray = [...buttonArray];
+    newArray.splice(index, 1)
+    setButtonArray(newArray);
+
+    // remove the active array
+    const newToggleArray = [...toggleActiveArray];
+    newToggleArray.splice(index, 1)
+    setToggleActiveArray(newToggleArray);
+
+  }
+
+  const CheckLinked = (indexInput, linkInput) => { // bold
+    setInput((prevState) => {
+      const newArray = [...prevState[linkInput]];
+      if (newArray.includes(indexInput)) {
+        // it does exist remove it
+        const indexOfChecked = newArray.indexOf(indexInput);
+        newArray.splice(indexOfChecked, 1)
+      } else {
+        // add it to
+        newArray.push(indexInput)
+      }
+      return ({
+        ...prevState,
+        [linkInput]: newArray
+      });
+    });
+  }
+
+  const MakeEditLinks = (index) => {
+    // get all the link and then tick the ones that are in this buttons array already
+    // for the edit function
+
+    // copy the link to the edit input temporarily and set editing index
+    let linkCopy;
+    if (!input.editIndex) {
+      linkCopy = [...buttonArray[index].link]
+    } else {
+      linkCopy = [...input.edLink]
+    }
+    setInput({
+      ...input,
+      edLink: linkCopy,
+      editIndex: index
+    });
+
+    if (!toggleEditLinks) {
+      setToggleEditLinks(true);
+    }
+  }
+
+  const SaveEditToggle = () => {
+
+    const newArray = [...buttonArray];
+    newArray[input.editIndex] = ({
+      ...newArray[input.editIndex],
+      link: input.edLink
+    });
+    setButtonArray(newArray);
+
+  }
+
   const router = useRouter();
   const [togglesTitle, setTogglesTitle] = useState('');
   const [toggleActiveArray, setToggleActiveArray] = useState([0, 0]); // using 0 not false as it shortens the base64
   const [toggleLinks, setToggleLinks] = useState(false);
+  const [toggleEditLinks, setToggleEditLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState(false);
+  const [editLinks, setEditLinks] = useState(null);
+
   const [mode, setMode] = useState() // 1 = view, 2 = edit, 3=loading?
   const [input, setInput] = useState({
     title: '',
-    link: [],
+    link: [],// this is for new buttons
+    edLink: [], // this is for edits
+    editIndex: null // used so we know what is been edited
   })
   const [buttonArray, setButtonArray] = useState([
     { title: 'Number 1', link: [1] },
@@ -55,29 +124,13 @@ export default function Home() {
         link={el.link}
         toggleActive={toggleActiveArray[elIndex]}
         clicked={toggle}
+        deleteFn={DeleteToggle}
+        editFn={MakeEditLinks}
       />
     });
   }
 
-  const CheckLinked = (indexInput) => {
-    // does is exist already?
-    const newArray = [...input.link];
-    if (input.link.length > 0 && input.link.includes(indexInput)) {
-      // it does exist remove it
-      const indexOfChecked = newArray.indexOf(indexInput);
-      newArray.splice(indexOfChecked, 1)
-
-    } else {
-      // add it to
-      newArray.push(indexInput)
-    }
-    setInput({
-      ...input,
-      link: newArray
-    })
-
-  }
-
+  // for the adding menu
   let listOfLinks = null;
   if (buttonArray) {
     listOfLinks = buttonArray.map((el, index) => {
@@ -88,7 +141,7 @@ export default function Home() {
         // it does exist, check it
         show = true;
       }
-      return <div onClick={() => CheckLinked(index)} key={index} className="flex justify-start items-center mb-1 cursor-pointer mt-2">
+      return <div onClick={() => CheckLinked(index, 'link')} key={index} className="flex justify-start items-center mb-1 cursor-pointer mt-2">
 
         <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-400">
           <input type="checkbox" className="opacity-0 absolute"></input>
@@ -100,6 +153,27 @@ export default function Home() {
 
     })
   }
+
+  let listOfEditLinks = null;
+  listOfEditLinks = buttonArray.map((el, i) => {
+    // if the element exists in the edLink input then show the tick (this is only cosmetic)
+    let show = false;
+    if (input.edLink.length > 0 && input.edLink.includes(i)) {
+      // it does exist, check it
+      show = true;
+    }
+    if (buttonArray[input.editIndex] === el) {// if this is the btn we are editing do nothing
+      return null;
+    }
+    return <div onClick={() => CheckLinked(i, 'edLink')} key={i} className="flex justify-start items-center mb-1 cursor-pointer mt-2">
+
+      <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center cursor-pointer items-center mr-2 focus-within:border-blue-400">
+        <input type="checkbox" className="opacity-0 absolute"></input>
+        {show && <p className="text-green-500">X</p>}
+      </div>
+      <div className="select-none">{el.title}</div>
+    </div>
+  })
 
   const handleInputChange = useCallback((nameOfEntity, Value) => setInput({
     ...input,
@@ -115,7 +189,11 @@ export default function Home() {
       const newToggleArray = [...toggleActiveArray];
       newToggleArray.push(0);
       setToggleActiveArray(newToggleArray);
-      setInput({ title: '', link: [] })
+      setInput({
+        ...input,
+        title: '',
+        link: []
+      })
     }
 
   }
@@ -123,13 +201,22 @@ export default function Home() {
   const OpenSharesLink = () => {
     Encoding();
     setOpenShare(!openShare);
+  }
 
+  const CloseEdit = () => {
+    // set the editing one to blank and link 2
+    setInput({
+      ...input,
+      edLink: [],
+      editIndex: null
+    })
+    // set the toggle to off
+    setToggleEditLinks(false);
   }
 
   const Encoding = () => {
 
     // wrap the base64 in uri for safety
-
     let encodedBtnArray = '';
     buttonArray.map(el => {
       encodedBtnArray = encodedBtnArray + el.title.toString() + "&" + el.link.toString() + "~";
@@ -274,6 +361,18 @@ export default function Home() {
               {togglesTitle}</h3>
 
             <div className="leading-relaxed text-gray-500 font-bold uppercase py-4">
+              {toggleEditLinks &&
+                <>
+                  <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center absolute">
+                    <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
+                    {editLinks}
+                    {listOfEditLinks}
+                    <AiOutlineSave size={25} className="text-green-500 cursor-pointer" onClick={SaveEditToggle} />
+                  </div>
+
+                  <div onClick={CloseEdit} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                </>
+              }
               {toggleButtons}
             </div>
           </div>
