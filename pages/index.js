@@ -15,7 +15,7 @@ export default function Home() {
   const [toggleLinks, setToggleLinks] = useState(false);
   const [toggleEditLinks, setToggleEditLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
-  const [shareLink, setShareLink] = useState(false);
+  const [shareLink, setShareLink] = useState('');
   const [modalToggle, setModalToggle] = useState(false);
   const [validationPrompt, setValidationPrompt] = useState([]);
   const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
@@ -29,6 +29,7 @@ export default function Home() {
     { title: 'Toggle 1', link: [1] },
     { title: 'Toggle 2', link: [] },
   ]);
+  const urlLink = `${process.env.NEXT_PUBLIC_URL}?q=`
 
   const toggle = (index, linked) => {
     const tempArray = [...toggleActiveArray];
@@ -281,7 +282,7 @@ export default function Home() {
   }
 
   const Encoding = () => {
-
+    console.log('encoding');
     // wrap the base64 in uri for safety
     let encodedBtnArray = '';
     buttonArray.map(el => {
@@ -291,7 +292,7 @@ export default function Home() {
     const encodedTitle = encodeURIComponent(btoa(togglesTitle));
     const encodedActiveArray = encodeURIComponent(btoa(toggleActiveArray.toString()));
 
-    setShareLink(encodedTitle + "$" + encodedBtnArray + "$" + encodedActiveArray)
+    setShareLink(urlLink + encodedTitle + "$" + encodedBtnArray + "$" + encodedActiveArray)
 
   }
 
@@ -440,7 +441,7 @@ export default function Home() {
                 Share Link</h3>
 
               <p className="px-4 py-3 mb-2 text-white bg-indigo-500 rounded min-w-50 max-w-4xl text-sm shadow-lg border-0 outline-none focus:outline-none focus:ring">
-                {process.env.NEXT_PUBLIC_URL}?q={shareLink}
+                {shareLink}
               </p>
 
               <button onClick={() => { navigator.clipboard.writeText(shareLink) }} className="bg-purple-500 text-white flex justify-center items-center active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
