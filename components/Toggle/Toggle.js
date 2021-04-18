@@ -19,13 +19,13 @@ const Toggle = ({ title, toggleActive, clicked, index, link, deleteFn, editFn, m
                 <p className="py-4 px-4 break-words w-2/4 flex ml-auto justify-end">{title}</p>
             </div>
 
-            <div className="w-2/4 flex justify-start" >
+            <div className="w-2/4 flex justify-between" >
                 <button onClick={() => clicked(index, link)} className={`w-16 h-10 focus:outline-none bg-gray-300 rounded-full p-1 duration-300 ease-in-out ${toggleActive && 'bg-green-400 cursor-pointer'}`}>
                     <span className="sr-only">{srText}</span>
                     <div className={`bg-white w-8 h-8 rounded-full shadow-md cursor-pointer transform duration-300 ease-in-out ${toggleActive && 'translate-x-6'}`}>
                     </div>
                 </button>
-                <div className="flex ml-16 sm:w-full sm:pr-4 justify-end items-center cursor-pointer">
+                <div className="flex mr-2.5 justify-end items-center cursor-pointer">
                     {mode === 2 && <>
                         <span className="sr-only">Delete Toggle</span>
                         <IoRemoveCircleSharp onClick={() => deleteFn(index)} alt="Delete Toggle" size={25} className="text-red-300 shadow rounded-full hover:shadow-2xl outline-none focus:outline-none ease-linear transition-all duration-150" />
