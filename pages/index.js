@@ -2,17 +2,17 @@ import Head from 'next/head';
 import React, { useState, useCallback, useEffect } from 'react';
 import Toggle from '../components/Toggle/Toggle';
 import { IoAddCircleSharp, IoRefreshSharp } from 'react-icons/io5';
-import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiOutlineSave, AiOutlineTrophy } from 'react-icons/ai';
 import { FaShareAlt, FaCopy } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import LinkMenu from '../components/LinkMenu/LinkMenu';
 import Modal from '../components/Modal/Modal';
 import confetti from 'canvas-confetti';
 
-
 export default function Home() {
   const router = useRouter();
   const [togglesTitle, setTogglesTitle] = useState('');
+  const [confettiFire, setConfettiFire] = useState(false);
   const [toggleActiveArray, setToggleActiveArray] = useState([0, 0]); // using 0 not false as it shortens the base64
   const [toggleLinks, setToggleLinks] = useState(false);
   const [toggleEditLinks, setToggleEditLinks] = useState(false);
@@ -76,11 +76,16 @@ export default function Home() {
     });
   }
 
-  let result = toggleActiveArray.every(e => e == 1); // hack with the double equals
-  if (result) {
-    confetti({
-      particleCount: 150
-    });
+  // if it is not true already check it
+  if (!confettiFire) {
+    const result = toggleActiveArray.every(e => e == 1); // hack with the double equals
+    // fire it if is
+    if (result) {
+      setConfettiFire(true); // set this to stop on each re-render
+      confetti({
+        particleCount: 150
+      });
+    }
   }
 
   const MakeEditLinks = (index) => {
@@ -122,7 +127,7 @@ export default function Home() {
       // comes in title, btn, active
       setMode(1); // view mode
       const splitQueryString = router.query.q.split("$");
-      Decoding(splitQueryString[0], splitQueryString[1], splitQueryString[2]);
+      Decoding(splitQueryString[0], splitQueryString[1], splitQueryString[2], splitQueryString[3]);
     } else {
       setMode(2); // edit mode
     }
@@ -262,6 +267,8 @@ export default function Home() {
       ]);
       setToggleActiveArray([0, 0]);
       setTogglesTitle(''); // no title
+      setConfettiFire(false);
+      setToggleResult('');
       setOpenShare(false); // close share menu
       setMode(2); // edit mode
       router.push('/', undefined, { shallow: true }); // push to the home
@@ -281,6 +288,8 @@ export default function Home() {
     setToggleActiveArray([0, 0]);
     setTogglesTitle(''); // no title
     setOpenShare(false); // close share menu
+    setConfettiFire(false);
+    setToggleResult('');
     setMode(2); // edit mode
   }
 
@@ -308,15 +317,17 @@ export default function Home() {
     })
     encodedBtnArray = encodeURIComponent(btoa(encodedBtnArray));
     const encodedTitle = encodeURIComponent(btoa(togglesTitle));
+    const encodedResult = encodeURIComponent(btoa(toggleResult));
     const encodedActiveArray = encodeURIComponent(btoa(toggleActiveArray.toString()));
 
-    setShareLink(urlLink + encodedTitle + "$" + encodedBtnArray + "$" + encodedActiveArray)
+    setShareLink(urlLink + encodedTitle + "$" + encodedBtnArray + "$" + encodedActiveArray + "$" + encodedResult);
 
   }
 
-  const Decoding = (encodedTitle, encodedBtnArray, encodedActiveArray) => {
+  const Decoding = (encodedTitle, encodedBtnArray, encodedActiveArray, encodedResult) => {
     try { // crude error handling
       const decodedTitle = decodeURIComponent(atob(encodedTitle));
+      const decodedResult = decodeURIComponent(atob(encodedResult));
       const decodedActiveArray = decodeURIComponent(atob(encodedActiveArray));
       const decodedBtnArray = decodeURIComponent(atob(encodedBtnArray));
 
@@ -346,8 +357,8 @@ export default function Home() {
         activeArray[index] = parseInt(el);
       })
       setTogglesTitle(decodedTitle);
-      setToggleActiveArray(activeArray)
-
+      setToggleActiveArray(activeArray);
+      setToggleResult(decodedResult);
 
     } catch (error) {
       setModalToggle(true);
@@ -407,6 +418,17 @@ export default function Home() {
                       value={togglesTitle}
                       onChange={e => setTogglesTitle(e.currentTarget.value)}
                       type="text" placeholder="Title for Toggles"
+                      className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring" />
+                  </div>
+                </div>
+
+                <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
+                  <div className="pt-0 px-4">
+                    <div className="text-sm leading-normal text-center mt-0 mb-2 text-gray-500 font-bold uppercase">Toggles Result (optional)</div>
+                    <input
+                      value={toggleResult}
+                      onChange={e => setToggleResult(e.currentTarget.value)}
+                      type="text" placeholder="Result for all green Toggles"
                       className="px-3 py-4 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring" />
                   </div>
                 </div>
@@ -497,9 +519,14 @@ export default function Home() {
                 </>
               }
               {toggleButtons}
+              {confettiFire && <div className="flex flex-col justify-center items-center">
+                <AiOutlineTrophy size={35} className="text-purple-500" />
+                <h3 className=" px-4 text-2xl font-sniglet font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-purple-700 pt-6">
+                  {toggleResult}</h3>
+              </div>}
             </div>
-            <div className="flex justify-between">
 
+            <div className="flex justify-between">
               {/* Reset Button */}
               <div onClick={Reset} className="flex items-center cursor-pointer font-sniglet text-purple-500 hover:text-indigo-700 focus:text-purple-300">
                 <button className="focus:outline-none">
