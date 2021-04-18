@@ -203,6 +203,9 @@ export default function Home() {
       if (input.title.includes("&") || input.title.includes("~")) {
         setValidationPrompt(validationPrompt => [...validationPrompt, { message: 'Toggles name cannot contain "&" or "~" characters', background: 'bg-indigo-500' }]);
       }
+      if (input.title.length === 0) {
+        setValidationPrompt(validationPrompt => [...validationPrompt, { message: 'Please enter a Toggle Name', background: 'bg-indigo-500' }]);
+      }
     }
   }
 
@@ -337,7 +340,7 @@ export default function Home() {
 
 
     } catch (error) {
-      modalToggle(true);
+      setModalToggle(true);
     }
   }
 
