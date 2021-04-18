@@ -260,9 +260,15 @@ export default function Home() {
     if (modalToggle) {
       setModalToggle(false);
     }
-    Reset();
-    setMode(2); // edit mode
     router.push('/', undefined, { shallow: true }); // push to the home
+    setButtonArray([
+      { title: 'Toggle 1', link: [1] },
+      { title: 'Toggle 2', link: [] },
+    ]);
+    setToggleActiveArray([0, 0]);
+    setTogglesTitle(''); // no title
+    setOpenShare(false); // close share menu
+    setMode(2); // edit mode
   }
 
   const OpenSharesLink = () => {
