@@ -5,7 +5,7 @@ import { FiCheckSquare } from 'react-icons/fi'
 const LinkMenu = ({ index, linkType, title, show, clicked }) => {
     return (
 
-        <div onClick={() => clicked(index, linkType)} className="flex items-center justify-start mb-1 cursor-pointer mt-2 w-full">
+        <button onClick={() => clicked(index, linkType)} className="flex items-center justify-start mb-1 cursor-pointer mt-2 w-full">
 
             {/* <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-400">
                 <input type="checkbox" className="opacity-0 absolute"></input>
@@ -19,7 +19,7 @@ const LinkMenu = ({ index, linkType, title, show, clicked }) => {
 
             <div className="select-none ml-2">{title}</div>
 
-        </div>
+        </button>
 
     );
 }

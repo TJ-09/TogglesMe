@@ -91,7 +91,6 @@ export default function Home() {
   const [toggleEditLinks, setToggleEditLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState(false);
-  const [editLinks, setEditLinks] = useState(null);
 
   const [mode, setMode] = useState() // 1 = view, 2 = edit, 3=loading?
   const [input, setInput] = useState({
@@ -316,7 +315,7 @@ export default function Home() {
                         {listOfLinks}
                       </div>
 
-                      <div onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></div>
+                      <button onClick={() => setToggleLinks(!toggleLinks)} className="opacity-25 fixed inset-0 z-40 bg-black cursor-pointer"></button>
                     </>
                   }
                   <button onClick={() => setToggleLinks(!toggleLinks)} className="bg-purple-500 text-white font-semibold active:bg-gray-100 text-sm px-6 py-3 my-3 sm:my-0 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
@@ -364,8 +363,6 @@ export default function Home() {
                 <>
                   <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center absolute">
                     <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
-                    {editLinks}
-                    {/* // ***** fix this */}
                     {listOfEditLinks}
                     <AiOutlineSave size={25} className="text-green-500 cursor-pointer" onClick={SaveEditToggle} />
                   </div>
