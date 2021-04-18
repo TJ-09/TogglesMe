@@ -5,6 +5,7 @@ import { IoAddCircleSharp } from 'react-icons/io5'
 import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
 import { FaShareAlt, FaCopy } from 'react-icons/fa'
 import { useRouter } from 'next/router';
+import LinkMenu from '../components/LinkMenu/LinkMenu';
 
 export default function Home() {
 
@@ -141,16 +142,14 @@ export default function Home() {
         // it does exist, check it
         show = true;
       }
-      return <div onClick={() => CheckLinked(index, 'link')} key={index} className="flex justify-start items-center mb-1 cursor-pointer mt-2">
-
-        <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-400">
-          <input type="checkbox" className="opacity-0 absolute"></input>
-          {show && <p className="text-green-500">X</p>}
-        </div>
-        <div className="select-none">{el.title}</div>
-
-      </div>
-
+      return <LinkMenu
+        key={index}
+        index={index}
+        linkType={'link'}
+        title={el.title}
+        show={show}
+        clicked={CheckLinked}
+      />
     })
   }
 
@@ -165,14 +164,14 @@ export default function Home() {
     if (buttonArray[input.editIndex] === el) {// if this is the btn we are editing do nothing
       return null;
     }
-    return <div onClick={() => CheckLinked(i, 'edLink')} key={i} className="flex justify-start items-center mb-1 cursor-pointer mt-2">
-
-      <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center cursor-pointer items-center mr-2 focus-within:border-blue-400">
-        <input type="checkbox" className="opacity-0 absolute"></input>
-        {show && <p className="text-green-500">X</p>}
-      </div>
-      <div className="select-none">{el.title}</div>
-    </div>
+    return <LinkMenu
+      key={i}
+      index={i}
+      linkType={'edLink'}
+      title={el.title}
+      show={show}
+      clicked={CheckLinked}
+    />
   })
 
   const handleInputChange = useCallback((nameOfEntity, Value) => setInput({
@@ -366,6 +365,7 @@ export default function Home() {
                   <div className="flex flex-col place-items-center bg-white p-2 rounded-lg shadow-inner text-gray-800 z-50 origin-center absolute">
                     <AiOutlineCloseCircle size={25} className="text-purple-500 cursor-pointer" onClick={CloseEdit} />
                     {editLinks}
+                    {/* // ***** fix this */}
                     {listOfEditLinks}
                     <AiOutlineSave size={25} className="text-green-500 cursor-pointer" onClick={SaveEditToggle} />
                   </div>
