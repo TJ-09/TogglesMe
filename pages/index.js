@@ -127,6 +127,7 @@ export default function Home() {
       // there is a query
       // comes in title, btn, active
       setMode(1); // view mode
+      setConfettiFire(false);
       const splitQueryString = router.query.q.split("$");
       Decoding(splitQueryString[0], splitQueryString[1], splitQueryString[2], splitQueryString[3]);
     } else {
@@ -256,11 +257,11 @@ export default function Home() {
       if (modalToggle) {
         setModalToggle(false);
       }
+      setConfettiFire(false);
       router.push({
         pathname: '/',
         query: { q: router.query.q },
       });
-      setConfettiFire(false);
     } else {
       // reset everything
       setButtonArray([
