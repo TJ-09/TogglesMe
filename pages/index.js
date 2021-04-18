@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import React, { useState, useCallback, useEffect } from 'react';
 import Toggle from '../components/Toggle/Toggle';
-import { IoAddCircleSharp, IoRefreshSharp } from 'react-icons/io5'
-import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai'
-import { FaShareAlt, FaCopy } from 'react-icons/fa'
+import { IoAddCircleSharp, IoRefreshSharp } from 'react-icons/io5';
+import { AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai';
+import { FaShareAlt, FaCopy } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import LinkMenu from '../components/LinkMenu/LinkMenu';
 import Modal from '../components/Modal/Modal';
+import confetti from 'canvas-confetti';
+
 
 export default function Home() {
   const router = useRouter();
@@ -16,6 +18,7 @@ export default function Home() {
   const [toggleEditLinks, setToggleEditLinks] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [shareLink, setShareLink] = useState('');
+  const [toggleResult, setToggleResult] = useState('');
   const [modalToggle, setModalToggle] = useState(false);
   const [validationPrompt, setValidationPrompt] = useState([]);
   const [mode, setMode] = useState(2) // 1 = view, 2 = edit, 3=loading?
@@ -70,6 +73,13 @@ export default function Home() {
         ...prevState,
         [linkInput]: newArray
       });
+    });
+  }
+
+  let result = toggleActiveArray.every(e => e == 1); // hack with the double equals
+  if (result) {
+    confetti({
+      particleCount: 150
     });
   }
 
