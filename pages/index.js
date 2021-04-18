@@ -282,7 +282,6 @@ export default function Home() {
   }
 
   const Encoding = () => {
-    console.log('encoding');
     // wrap the base64 in uri for safety
     let encodedBtnArray = '';
     buttonArray.map(el => {
@@ -304,13 +303,12 @@ export default function Home() {
 
       // undo here
       const decodedBtnArraySplit = decodedBtnArray.split("~");
-      setButtonArray([{}]); // clear it
-      let newArray = [...buttonArray];
+      let newArray = []; // start with a blank array (getting everything from the url)
       decodedBtnArraySplit.map((el, index) => {
         const temp = el.split("&");
         if (temp.length === 2) {
 
-          newArray = [...buttonArray];
+          // newArray = [...buttonArray];
           const linkArray = temp[1].split(",");
           linkArray.map((el, index) => {
             if (el.length > 0) { // could have no link
