@@ -352,7 +352,7 @@ export default function Home() {
         <meta property="og:title" content='Toggles Me' />
         <meta property="og:type" content='website' />
         <meta property="og:url" content='toggles.me' />
-        <meta property="og:image" content="" />
+        <meta property="og:image" content="/apple-touch-icon.png" />
         <meta property="og:description" content='Create funny toggles and share with your friends' />
         <meta property="og:site_name" content="Toggles Me" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
