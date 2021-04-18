@@ -80,7 +80,7 @@ export default function Home() {
   if (!confettiFire) {
     const result = toggleActiveArray.every(e => e == 1); // hack with the double equals
     // fire it if is
-    if (result) {
+    if (result && toggleActiveArray.length > 0) {
       setConfettiFire(true); // set this to stop on each re-render
       confetti({
         particleCount: 150
