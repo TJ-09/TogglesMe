@@ -22,16 +22,16 @@ const Custom404 = () => {
                 <meta name="theme-color" content="#ffffff" />
             </Head>
 
-            <main className="bg-gradient-to-b from-indigo-300 to-purple-400 relative min-h-screen">
+            <main className="bg-linear-to-b from-indigo-300 to-purple-400 relative min-h-screen">
 
                 <div className="container mx-auto px-4 py-16 max-w-6xl">
 
-                    <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+                    <div className="flex flex-col justify-center items-center min-w-0 wrap-break-word bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
                         <h1 className="px-4 py-4 text-2xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
                             Toggles Me 404</h1>
                         <h3 className="px-4 pb-4 text-lg font-sniglet hover:text-indigo-700 focus:text-indigo-700 font-normal text-center text-purple-500">
                             <Link href='/'>
-                                <a> Sorry just the one page! Go Home? Click here!</a>
+                                Sorry just the one page! Go Home? Click here!
                             </Link>
                         </h3>
                     </div>

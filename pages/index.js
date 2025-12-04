@@ -387,7 +387,7 @@ export default function Home() {
         <meta name="theme-color" content="#ffffff" />
       </Head>
 
-      <main className="bg-gradient-to-b from-indigo-300 to-purple-400 relative min-h-screen">
+      <main className="bg-linear-to-b from-indigo-300 to-purple-400 relative min-h-screen">
 
         <Modal title={'Something went wrong with the link =('}
           toggle={modalToggle}
@@ -401,21 +401,21 @@ export default function Home() {
         <div className="container mx-auto px-4 py-16 max-w-6xl">
 
           {/* Heading */}
-          <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+          <div className="flex flex-col justify-center items-center min-w-0 wrap-break-word bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
             <Link href='/'>
-              <a>
-                <span className="sr-only">Home Link</span>
-                <h1 className="px-4 py-4 text-4xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
-                  Toggles Me</h1>
-                <h3 className="hidden sm:block px-4 pb-4 text-md sm:text-sm font-sniglet font-normal text-center text-purple-500">
-                  Create and share funny toggles with your friends
-            </h3>
-              </a>
+
+              <span className="sr-only">Home Link</span>
+              <h1 className="px-4 py-4 text-4xl sm:text-7xl font-sniglet font-extrabold text-center text-purple-900">
+                Toggles Me</h1>
+              <h3 className="hidden sm:block px-4 pb-4 text-md sm:text-sm font-sniglet font-normal text-center text-purple-500">
+                Create and share funny toggles with your friends
+              </h3>
+
             </Link>
           </div>
 
           {/* Creating Box */}
-          <div className="relative flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-500 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+          <div className="relative flex flex-col justify-center items-center min-w-0 wrap-break-word bg-white text-gray-500 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
             {mode !== 1 &&
               <>
                 <div className="leading-relaxed text-gray-500 font-bold py-4 max-w-4xl">
@@ -487,7 +487,7 @@ export default function Home() {
 
           {/* Share box */}
           {openShare &&
-            <div className="flex flex-col justify-center items-center min-w-0 break-words bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+            <div className="flex flex-col justify-center items-center min-w-0 wrap-break-word bg-white text-gray-700 shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
               <h3 className="px-4 text-4xl font-normal text-center leading-normal mb-2 text-gray-700 pt-6">
                 Share Link</h3>
 
@@ -501,8 +501,8 @@ export default function Home() {
           }
 
           {/* Main toggles */}
-          <div className="static min-w-0 break-words bg-white text-gray-700 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
-            <h3 className=" px-4 text-4xl font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-gray-700 pt-6">
+          <div className="static min-w-0 wrap-break-word bg-white text-gray-700 w-full shadow-2xl rounded-lg ring-4 ring-purple-200 ring-opacity-50 mt-8">
+            <h3 className=" px-4 text-4xl font-normal text-center wrap-break-word overflow-clip leading-normal mt-0 mb-2 text-gray-700 pt-6">
               {togglesTitle}</h3>
 
             <div className="leading-relaxed text-gray-500 font-bold uppercase py-4">
@@ -528,7 +528,7 @@ export default function Home() {
               {toggleButtons}
               {confettiFire && <div className="flex flex-col justify-center items-center">
                 <AiOutlineTrophy size={35} className="text-purple-500" />
-                <h3 className=" px-4 text-2xl font-sniglet font-normal text-center break-words overflow-clip leading-normal mt-0 mb-2 text-purple-700 pt-6">
+                <h3 className=" px-4 text-2xl font-sniglet font-normal text-center wrap-break-word overflow-clip leading-normal mt-0 mb-2 text-purple-700 pt-6">
                   {toggleResult}</h3>
               </div>}
             </div>
